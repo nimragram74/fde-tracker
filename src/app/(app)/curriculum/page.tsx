@@ -1,5 +1,6 @@
 import { prisma } from "../../../lib/db";
-import { BookOpen } from "lucide-react";
+import Link from "next/link";
+import { BookOpen, ArrowRight } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -47,16 +48,22 @@ export default async function CurriculumPage() {
               <p className="mb-3 text-[13px] text-slate-600">{w.goal}</p>
               <ol className="space-y-1.5">
                 {w.days.map((d) => (
-                  <li key={d.id} className="flex items-start gap-2.5 text-sm">
-                    <span className="mt-0.5 grid h-5 w-9 shrink-0 place-items-center rounded bg-slate-100 font-mono text-[11px] font-semibold text-azure-deep">
-                      {d.label}
-                    </span>
-                    <span className="text-slate-700">
-                      <span className="mr-1.5 text-[10px] font-semibold uppercase text-slate-400">
-                        {d.dow}
+                  <li key={d.id}>
+                    <Link
+                      href={`/curriculum/${w.number}/${encodeURIComponent(d.label)}`}
+                      className="group flex items-start gap-2.5 rounded-md px-1.5 py-1.5 text-sm transition hover:bg-slate-50"
+                    >
+                      <span className="mt-0.5 grid h-5 w-9 shrink-0 place-items-center rounded bg-slate-100 font-mono text-[11px] font-semibold text-azure-deep group-hover:bg-azure group-hover:text-white">
+                        {d.label}
                       </span>
-                      {d.focus}
-                    </span>
+                      <span className="min-w-0 flex-1 text-slate-700">
+                        <span className="mr-1.5 text-[10px] font-semibold uppercase text-slate-400">
+                          {d.dow}
+                        </span>
+                        {d.focus}
+                      </span>
+                      <ArrowRight size={14} className="mt-1 shrink-0 text-slate-300 group-hover:text-azure" />
+                    </Link>
                   </li>
                 ))}
               </ol>
