@@ -125,11 +125,11 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       healthCheckPath: '/api/health'
-      // Just start Next — the app is prebuilt on the deploy machine (azure.yaml
-      // prepackage hook) and the DB schema is applied there too (postprovision
-      // hook). Running `prisma db push` here would make App Service download the
-      // Prisma CLI at boot (devDependency isn't deployed), hanging startup.
-      appCommandLine: 'npm run start'
+      // Run the prebuilt Next.js standalone server directly. HOSTNAME=0.0.0.0 is
+      // required so the server binds all interfaces (App Service sets HOSTNAME to
+      // the container name otherwise, and the health check would fail). PORT is
+      // provided by App Service (8080). Schema is applied by the postprovision hook.
+      appCommandLine: 'HOSTNAME=0.0.0.0 node server.js'
       appSettings: [
         { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'false' }
         { name: 'ENABLE_ORYX_BUILD', value: 'false' }
