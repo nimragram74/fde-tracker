@@ -1,3 +1,5 @@
+import path from "node:path";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Container builds (Dockerfile sets BUILD_STANDALONE=1) use the self-contained
@@ -11,6 +13,10 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: "2mb",
     },
+  },
+  webpack: (config) => {
+    config.resolve.alias["@"] = path.resolve(process.cwd(), "src");
+    return config;
   },
 };
 
