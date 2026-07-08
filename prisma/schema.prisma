@@ -1,0 +1,193 @@
+// FDE Tracker — data model
+// Provider is configurable. Default: PostgreSQL (Azure Database for PostgreSQL
+// Flexible Server). To target Azure SQL, change `provider` to "sqlserver" and
+// update DATABASE_URL (see README → "Configurable database").
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Subscription plans (configurable in Admin → Plans) ───────────────
+model Plan {
+  key             String   @id // free | pro | enterprise
+  name            String
+  priceMonthly    Int      @default(0) // USD / month
+  maxCohorts      Int      @default(1)
+  maxParticipants Int      @default(25)
+  features        Json // { analytics, sso, exports, api, prioritySupport, customBranding }
+  isActive        Boolean  @default(true)
+  sortOrder       Int      @default(0)
+  orgs            Org[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// ── Tenant / organisation (holds the active plan) ────────────────────
+model Org {
+  id        String   @id @default(cuid())
+  name      String
+  planKey   String
+  plan      Plan     @relation(fields: [planKey], references: [key])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  VIEWER
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  name        String?
+  image       String?
+  role        Role      @default(VIEWER)
+  createdAt   DateTime  @default(now())
+  lastLoginAt DateTime?
+}
+
+// ── Curriculum template (16 weeks × 5 days = 80) ─────────────────────
+model Week {
+  number     Int    @id // 1..16
+  code       String
+  title      String
+  goal       String
+  layer      String
+  certAnchor String
+  accent     String @default("#0a6ed1")
+  days       Day[]
+}
+
+model Day {
+  id         String     @id @default(cuid())
+  weekNumber Int
+  week       Week       @relation(fields: [weekNumber], references: [number], onDelete: Cascade)
+  label      String // "1.1"
+  dow        String // Mon..Fri
+  focus      String
+  orderIndex Int // 1..80 (global)
+  progress   Progress[]
+
+  @@unique([weekNumber, label])
+}
+
+enum CohortStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+model Cohort {
+  id           String        @id @default(cuid())
+  name         String
+  code         String        @unique
+  track        String        @default("16-week comprehensive")
+  status       CohortStatus  @default(ACTIVE)
+  startDate    DateTime
+  endDate      DateTime
+  podLead      String?
+  participants Participant[]
+  createdAt    DateTime      @default(now())
+}
+
+enum ParticipantStatus {
+  ACTIVE
+  AT_RISK
+  COMPLETED
+  DROPPED
+}
+
+model Participant {
+  id             String            @id @default(cuid())
+  cohortId       String
+  cohort         Cohort            @relation(fields: [cohortId], references: [id], onDelete: Cascade)
+  name           String
+  email          String
+  title          String?
+  pod            String?
+  status         ParticipantStatus @default(ACTIVE)
+  targetCert     String?
+  progress       Progress[]
+  certifications Certification[]
+  capstones      Capstone[]
+  createdAt      DateTime          @default(now())
+
+  @@unique([cohortId, email])
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  DONE
+}
+
+model Progress {
+  id            String         @id @default(cuid())
+  participantId String
+  participant   Participant    @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  dayId         String
+  day           Day            @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  status        ProgressStatus @default(NOT_STARTED)
+  score         Int? // quiz score 0..100
+  completedAt   DateTime?
+  note          String?
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([participantId, dayId])
+}
+
+enum CertStatus {
+  PLANNED
+  IN_PROGRESS
+  PASSED
+  FAILED
+}
+
+model Certification {
+  id             String      @id @default(cuid())
+  participantId  String
+  participant    Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  code           String
+  name           String
+  status         CertStatus  @default(PLANNED)
+  isAppliedSkill Boolean     @default(false)
+  examDate       DateTime?
+  createdAt      DateTime    @default(now())
+}
+
+enum CapstoneStatus {
+  PLANNED
+  BUILDING
+  EVALUATED
+  DEPLOYED
+  PRESENTED
+}
+
+model Capstone {
+  id            String         @id @default(cuid())
+  participantId String
+  participant   Participant    @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  title         String
+  agentsPlanned Int            @default(2)
+  agentsShipped Int            @default(0)
+  status        CapstoneStatus @default(PLANNED)
+  deployUrl     String?
+  evalScore     Int? // 0..100
+  adoptionScore Int? // 0..100
+  updatedAt     DateTime       @updatedAt
+}
+
+// ── Key/value app settings (DB config display, org prefs) ────────────
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}

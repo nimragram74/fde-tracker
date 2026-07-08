@@ -1,0 +1,34 @@
+# Azure Developer CLI (azd) configuration.
+# `azd up` provisions the infra in infra/main.bicep and deploys this app.
+name: fde-tracker
+metadata:
+  template: fde-tracker@1.0.0
+
+# After infra is provisioned, apply the Prisma schema and seed demo data
+# against the freshly-created Azure PostgreSQL (uses the DATABASE_URL output).
+hooks:
+  postprovision:
+    posix:
+      shell: sh
+      continueOnError: true
+      interactive: true
+      run: |
+        echo "→ Applying schema & seeding demo data to Azure PostgreSQL…"
+        npm ci
+        npx prisma db push --skip-generate
+        npm run seed
+    windows:
+      shell: pwsh
+      continueOnError: true
+      interactive: true
+      run: |
+        Write-Host "→ Applying schema & seeding demo data to Azure PostgreSQL…"
+        npm ci
+        npx prisma db push --skip-generate
+        npm run seed
+
+services:
+  web:
+    project: .
+    language: js
+    host: appservice
