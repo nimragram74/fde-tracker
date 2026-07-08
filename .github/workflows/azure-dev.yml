@@ -21,6 +21,8 @@ jobs:
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
       AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
       AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
+      # Prebuilt zip (with node_modules) can be large; give deploy extra headroom.
+      AZD_DEPLOY_TIMEOUT: "2400"
       # Secrets used by Bicep parameters:
       DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       AUTH_SECRET: ${{ secrets.AUTH_SECRET }}

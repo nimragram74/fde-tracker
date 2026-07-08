@@ -32,3 +32,14 @@ services:
     project: .
     language: js
     host: appservice
+    # Build on the deploy machine (GitHub runner — fast, plenty of RAM) instead
+    # of on the small B1 App Service instance. App Service then only runs the
+    # prebuilt app (SCM_DO_BUILD_DURING_DEPLOYMENT=false in main.bicep).
+    hooks:
+      prepackage:
+        posix:
+          shell: sh
+          run: npm run build
+        windows:
+          shell: pwsh
+          run: npm run build

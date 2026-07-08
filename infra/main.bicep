@@ -126,9 +126,12 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
       minTlsVersion: '1.2'
       healthCheckPath: '/api/health'
       // Push the Prisma schema on boot (idempotent), then start Next.
+      // The app is built on the deploy machine (see azure.yaml prepackage hook),
+      // so App Service skips the Oryx build and just runs the prebuilt output.
       appCommandLine: 'npx prisma db push --skip-generate && npm run start'
       appSettings: [
-        { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'true' }
+        { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'false' }
+        { name: 'ENABLE_ORYX_BUILD', value: 'false' }
         { name: 'WEBSITE_NODE_DEFAULT_VERSION', value: '~20' }
         { name: 'NODE_ENV', value: 'production' }
         { name: 'NEXT_TELEMETRY_DISABLED', value: '1' }
