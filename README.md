@@ -1,9 +1,9 @@
-# FDE Tracker — Wipro × Microsoft FDE Academy
+# Microsoft AI FDE Program Portal — Wipro × Microsoft AI FDE Program
 
 A **multi-page, server-rendered** web app (Next.js App Router — *not* a SPA) to
-**track & monitor** the 16-week Microsoft AI Forward Deployed Engineer program:
+**track & monitor** the 16-week Microsoft AI FDE Program:
 cohorts, participants, day-by-day progress, certifications, and capstones — with
-**Microsoft Entra ID SSO**, a **configurable database**, and **configurable
+**built-in admin/learner persona switch**, a **configurable database**, and **configurable
 subscription plans** (feature-gating + limits).
 
 Built to deploy to **your Azure subscription** with a single `azd up`.
@@ -16,7 +16,7 @@ Built to deploy to **your Azure subscription** with a single `azd up`.
 |------|--------|
 | **Framework** | Next.js 14 (App Router, React Server Components, server actions) |
 | **UI** | Tailwind CSS · Recharts · lucide icons · Fluent-inspired design |
-| **Auth** | Microsoft Entra ID SSO via Auth.js (NextAuth v5), edge-safe middleware |
+| **Auth** | built-in admin/learner persona switch via Auth.js (NextAuth v5), edge-safe middleware |
 | **Database** | PostgreSQL via Prisma ORM — **swappable** (Azure SQL / Cockroach) |
 | **Subscription plans** | Free / Pro / Enterprise with editable limits + feature-gating |
 | **Hosting** | Azure App Service (Linux · Node 20) |
@@ -35,40 +35,25 @@ Built to deploy to **your Azure subscription** with a single `azd up`.
 ### Prerequisites
 - [Azure Developer CLI (`azd`)](https://aka.ms/azd), [Azure CLI](https://aka.ms/azcli), Node 20+
 - An Azure subscription you can create resources in
-- An **Entra ID app registration** (below)
 
-### 1. Register an Entra ID app (for SSO)
-1. Entra admin center → **App registrations** → **New registration**.
-2. Redirect URI (Web) — add **both** once you know the app URL:
-   - `https://<app-name>.azurewebsites.net/api/auth/callback/microsoft-entra-id`
-   - `http://localhost:3000/api/auth/callback/microsoft-entra-id` (local dev)
-   > Tip: run `azd provision` first to learn the app URL, then add the redirect URI.
-3. **Certificates & secrets** → new client secret → copy the **value**.
-4. Note the **Application (client) ID** and **Directory (tenant) ID**.
-
-### 2. Set deployment parameters
+### 1. Set deployment parameters
 ```bash
 azd init            # if starting fresh in this folder; else skip
 azd env new fde-prod
 
 azd env set DATABASE_PASSWORD "$(openssl rand -base64 24)"
 azd env set AUTH_SECRET "$(openssl rand -base64 32)"
-azd env set AUTH_MICROSOFT_ENTRA_ID_ID "<application-client-id>"
-azd env set AUTH_MICROSOFT_ENTRA_ID_SECRET "<client-secret-value>"
-azd env set AUTH_MICROSOFT_ENTRA_ID_ISSUER "https://login.microsoftonline.com/<tenant-id>/v2.0"
 azd env set ADMIN_EMAILS "raghuram.nimishakavi@wipro.com"
 ```
 
-### 3. Provision + deploy
+### 2. Provision + deploy
 ```bash
 azd up
 ```
 This provisions the infrastructure, deploys the app, and (via the `postprovision`
 hook) applies the Prisma schema and seeds the demo cohort. When it finishes, azd
-prints the **WEB_URI** — open it and sign in with Microsoft.
-
-> After the first `azd provision`, add the real
-> `https://<app>.azurewebsites.net/...callback...` redirect URI to your Entra app.
+prints the **WEB_URI**. Open it and use the header persona switch to move between
+Learner and Admin views.
 
 ---
 
@@ -130,12 +115,12 @@ fde-tracker/
 │  ├─ schema.prisma          # data model (configurable provider)
 │  └─ seed.ts                # curriculum + demo cohort
 ├─ src/
-│  ├─ auth.ts / auth.config.ts / middleware.ts   # Entra ID SSO
+│  ├─ auth.ts / auth.config.ts / middleware.ts   # demo personas and route guard
 │  ├─ lib/                   # db, plans, settings, program, rbac
 │  ├─ components/            # Sidebar, TopBar, charts, cards…
 │  └─ app/
 │     ├─ (app)/…             # authed shell + all tracking pages
-│     ├─ login/              # SSO sign-in
+│     ├─ login/              # demo redirect
 │     └─ api/{auth,health}/  # Auth.js + health probe
 └─ Dockerfile                # optional container path (Container Apps)
 ```
@@ -154,9 +139,8 @@ fde-tracker/
 
 ## 🩺 Troubleshooting
 
-- **Sign-in loops / redirect error** → the Entra redirect URI must exactly match
-  `https://<app>/api/auth/callback/microsoft-entra-id`, and `NEXTAUTH_URL` must be
-  the app's HTTPS URL (set automatically by Bicep).
+- **Learner cannot open admin pages** → expected behavior. Switch to Admin in the
+  top bar to access dashboard, tracking, plans, and settings.
 - **`/api/health` returns 503** → the app can't reach Postgres; check the firewall
   rules and that `DATABASE_URL` resolved from Key Vault.
 - **Empty dashboard** → the seed didn't run; from a machine allowed by the firewall
@@ -164,4 +148,4 @@ fde-tracker/
 
 ---
 
-_Generated for the Wipro × Microsoft FDE Center of Excellence._
+_Generated for the Wipro × Microsoft AI FDE Center of Excellence._

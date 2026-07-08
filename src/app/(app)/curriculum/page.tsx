@@ -12,14 +12,28 @@ export default async function CurriculumPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="h-page">Curriculum</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          The 16-week Microsoft AI FDE Academy — {weeks.length} weeks ·{" "}
-          {weeks.reduce((s, w) => s + w.days.length, 0)} days. Each week maps to a stack layer and
-          a certification anchor.
-        </p>
-      </div>
+      <section className="overflow-hidden rounded-lg border border-line bg-white">
+        <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-6 lg:p-8">
+            <h1 className="h-page">Microsoft AI FDE Curriculum</h1>
+            <p className="mt-2 max-w-3xl text-sm text-slate-500">
+              The 16-week Microsoft AI FDE Program includes {weeks.length} weeks and{" "}
+              {weeks.reduce((s, w) => s + w.days.length, 0)} learning days. Open any day
+              for learning outcomes, official references, videos, labs, quizzes, and deliverables.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="chip">Learner single pane</span>
+              <span className="chip">Daily labs</span>
+              <span className="chip">Quiz checks</span>
+            </div>
+          </div>
+          <img
+            src="/images/microsoft-ai-fde-hero.png"
+            alt="Microsoft AI FDE learning and lab visual"
+            className="h-full min-h-[220px] w-full object-cover"
+          />
+        </div>
+      </section>
 
       <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {weeks.map((w) => (

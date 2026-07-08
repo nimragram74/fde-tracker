@@ -28,7 +28,7 @@ export default async function CohortsPage() {
       <div>
         <h1 className="h-page">Cohorts</h1>
         <p className="mt-1 text-sm text-slate-500">
-          {cohorts.length} cohort{cohorts.length === 1 ? "" : "s"} running the FDE Academy.
+          {cohorts.length} cohort{cohorts.length === 1 ? "" : "s"} running the Microsoft AI FDE Program.
         </p>
       </div>
 

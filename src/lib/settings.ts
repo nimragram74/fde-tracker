@@ -23,5 +23,5 @@ export async function getDbInfo() {
 
 export async function getOrgName() {
   const org = await prisma.org.findFirst();
-  return org?.name ?? process.env.DEFAULT_ORG_NAME ?? "FDE Academy";
+  return org?.name ?? process.env.DEFAULT_ORG_NAME ?? "Microsoft AI FDE Program";
 }

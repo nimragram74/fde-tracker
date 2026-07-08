@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "FDE Tracker — Wipro × Microsoft FDE Academy",
+  title: "Microsoft AI FDE Program Portal",
   description:
-    "Cohort tracking & monitoring for the 16-week Microsoft AI Forward Deployed Engineer Academy.",
+    "Learning, labs, quizzes, and cohort tracking for the 16-week Microsoft AI FDE Program.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

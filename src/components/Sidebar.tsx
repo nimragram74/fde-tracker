@@ -14,7 +14,7 @@ import {
   Boxes,
 } from "lucide-react";
 
-const nav = [
+const adminNavGroups = [
   { section: "Overview", items: [{ href: "/", label: "Dashboard", icon: LayoutDashboard }] },
   {
     section: "Program",
@@ -32,7 +32,14 @@ const nav = [
   },
 ];
 
-const adminNav = {
+const learnerNavGroups = [
+  {
+    section: "Learning",
+    items: [{ href: "/curriculum", label: "Curriculum", icon: BookOpen }],
+  },
+];
+
+const adminSettingsNav = {
   section: "Admin",
   items: [
     { href: "/admin/plans", label: "Plans & billing", icon: Sliders },
@@ -45,7 +52,7 @@ export function Sidebar({ isAdmin, orgName }: { isAdmin: boolean; orgName: strin
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-  const groups = isAdmin ? [...nav, adminNav] : nav;
+  const groups = isAdmin ? [...adminNavGroups, adminSettingsNav] : learnerNavGroups;
 
   return (
     <aside className="sticky top-0 hidden h-screen w-[260px] shrink-0 flex-col bg-gradient-to-b from-navy-900 via-navy-800 to-navy-700 text-white md:flex">
@@ -54,9 +61,9 @@ export function Sidebar({ isAdmin, orgName }: { isAdmin: boolean; orgName: strin
           F
         </span>
         <div className="leading-tight">
-          <div className="text-sm font-bold">FDE Academy</div>
+          <div className="text-sm font-bold">Microsoft AI FDE</div>
           <div className="text-[10px] uppercase tracking-widest text-slate-400">
-            Tracking &amp; Monitoring
+            Program Portal
           </div>
         </div>
       </div>

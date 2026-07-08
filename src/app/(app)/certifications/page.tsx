@@ -88,7 +88,7 @@ export default async function CertificationsPage() {
           </ul>
           <p className="mt-3 text-[11px] text-slate-400">
             Validate exact live codes with your Microsoft partner contact before publishing the
-            Academy ladder — the 2026 portfolio is still settling.
+            Microsoft AI FDE Program ladder; the 2026 portfolio is still settling.
           </p>
         </div>
       </div>

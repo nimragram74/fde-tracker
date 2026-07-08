@@ -1,4 +1,4 @@
-# Deploying FDE Tracker to Azure (GitHub Actions + azd)
+# Deploying Microsoft AI FDE Program Portal to Azure (GitHub Actions + azd)
 
 Repo: `nimragram74/fde-tracker` · Tenant: `wipro365crm` · Region: **East US** · Env: `fde-prod`
 
@@ -61,7 +61,7 @@ Repo → **Settings → Secrets and variables → Actions**.
 | `DATABASE_PASSWORD` | `C7P7WdnPW3MLwT4hhNxPkaCoZ5ct` |
 | `AUTH_SECRET` | `2M+IezNwQJtOwFC7FuBDzsGDMFQ213YEpHK1uk0ZMQ0=` |
 
-SSO is **not** configured yet — leave `AUTH_MICROSOFT_ENTRA_ID_ID`,
+SSO is **not** required for the current demo flow — leave `AUTH_MICROSOFT_ENTRA_ID_ID`,
 `AUTH_MICROSOFT_ENTRA_ID_SECRET`, `AUTH_MICROSOFT_ENTRA_ID_ISSUER` unset.
 Bicep defaults them to empty; the app deploys but sign-in won't work until
 you add an Entra App Registration for the app and set these three (see below).
@@ -87,7 +87,7 @@ Persistent, billable stack (~$30–40/mo). To tear it all down later:
 `az group delete -n rg-fde-prod` (the azd-created resource group), or delete
 the resource group in the Portal.
 
-## Enabling SSO later
+## Optional SSO later
 
 1. Entra ID → App registrations → New registration for the **app itself**
    (separate from the CI identity). Add a **Web** redirect URI:

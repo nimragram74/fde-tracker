@@ -34,9 +34,9 @@ const emailFor = (name: string) => name.toLowerCase().replace(/\s+/g, ".") + "@w
 const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 async function main() {
-  console.log("Seeding FDE Tracker…");
+  console.log("Seeding Microsoft AI FDE Program Portal...€¦");
 
-  // ── Plans ──────────────────────────────────────────────────────────
+  // â”€â”€ Plans â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   await prisma.plan.upsert({
     where: { key: "free" },
     update: {},
@@ -62,14 +62,14 @@ async function main() {
     },
   });
 
-  // ── Org (Enterprise plan) ──────────────────────────────────────────
-  const orgName = process.env.DEFAULT_ORG_NAME || "Wipro × Microsoft FDE Academy";
+  // â”€â”€ Org (Enterprise plan) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  const orgName = process.env.DEFAULT_ORG_NAME || "Wipro x Microsoft AI FDE Program";
   const existingOrg = await prisma.org.findFirst();
   const org = existingOrg
     ? await prisma.org.update({ where: { id: existingOrg.id }, data: { name: orgName, planKey: "enterprise" } })
     : await prisma.org.create({ data: { name: orgName, planKey: "enterprise" } });
 
-  // ── Curriculum (16 weeks × 5 days) ─────────────────────────────────
+  // â”€â”€ Curriculum (16 weeks Ã— 5 days) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const dayIdByLabel = new Map<string, string>();
   let order = 0;
   for (const w of PROGRAM) {
@@ -93,23 +93,23 @@ async function main() {
     .sort((a, b) => a.orderIndex - b.orderIndex);
   const totalDays = allDays.length;
 
-  // ── Cohort ─────────────────────────────────────────────────────────
+  // â”€â”€ Cohort â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const start = new Date();
   start.setDate(start.getDate() - 7 * 9); // ~9 weeks in
   const end = new Date(start);
   end.setDate(end.getDate() + 7 * 16);
   const cohort = await prisma.cohort.upsert({
     where: { code: "FDE-FY26-Q3-01" },
-    update: { name: "Cohort 01 — FY26 Q3", startDate: start, endDate: end, status: "ACTIVE", podLead: "Ramachandran Padmanabhan" },
+    update: { name: "Cohort 01 â€” FY26 Q3", startDate: start, endDate: end, status: "ACTIVE", podLead: "Ramachandran Padmanabhan" },
     create: {
-      name: "Cohort 01 — FY26 Q3", code: "FDE-FY26-Q3-01", track: "16-week comprehensive",
+      name: "Cohort 01 â€” FY26 Q3", code: "FDE-FY26-Q3-01", track: "16-week comprehensive",
       status: "ACTIVE", startDate: start, endDate: end, podLead: "Ramachandran Padmanabhan",
     },
   });
 
   const cohortCurrentDay = 45; // programme is ~day 45 of 80
 
-  // ── Participants + progress + certs + capstones ────────────────────
+  // â”€â”€ Participants + progress + certs + capstones â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   for (let i = 0; i < PARTICIPANTS.length; i++) {
     const p = PARTICIPANTS[i];
     const variance = [8, -14, 3, -2, -20, 6, -4, 1, -6, 2, 5, -10, 7, -3][i] ?? 0;
@@ -148,7 +148,7 @@ async function main() {
       });
     }
 
-    // Certifications — target cert + a baseline AB-900 + one Applied Skill
+    // Certifications â€” target cert + a baseline AB-900 + one Applied Skill
     const passedTarget = personal > 74;
     await upsertCert(participant.id, p.cert, CERT_NAMES[p.cert] ?? p.cert, passedTarget ? "IN_PROGRESS" : "PLANNED", false);
     await upsertCert(participant.id, "AB-900", CERT_NAMES["AB-900"], personal > 30 ? "PASSED" : "PLANNED", false);
@@ -165,7 +165,7 @@ async function main() {
     await prisma.capstone.create({
       data: {
         participantId: participant.id,
-        title: `${p.pod} · ${["Grounded helpdesk agent", "SOW drafting Copilot", "Incident-triage agent", "Policy Q&A declarative agent"][i % 4]}`,
+        title: `${p.pod} Â· ${["Grounded helpdesk agent", "SOW drafting Copilot", "Incident-triage agent", "Policy Q&A declarative agent"][i % 4]}`,
         agentsPlanned: 2, agentsShipped: shipped, status: cst,
         deployUrl: cst === "DEPLOYED" || cst === "PRESENTED" ? "https://contoso-fde-demo.azurewebsites.net" : null,
         evalScore: cst === "PLANNED" || cst === "BUILDING" ? null : rnd(72, 95),
@@ -174,7 +174,7 @@ async function main() {
     });
   }
 
-  // ── Admin users ────────────────────────────────────────────────────
+  // â”€â”€ Admin users â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   const admins = (process.env.ADMIN_EMAILS || "raghuram.nimishakavi@wipro.com")
     .split(",").map((s) => s.trim()).filter(Boolean);
   for (const email of admins) {
@@ -185,7 +185,7 @@ async function main() {
     });
   }
 
-  // ── App settings (configurable-DB display + org prefs) ─────────────
+  // â”€â”€ App settings (configurable-DB display + org prefs) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   await setSetting("db.provider", process.env.DATABASE_PROVIDER || "postgresql");
   await setSetting("db.displayHost", maskHost(process.env.DATABASE_URL));
   await setSetting("org.id", org.id);

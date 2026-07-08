@@ -2,7 +2,7 @@
   "name": "fde-tracker",
   "version": "1.0.0",
   "private": true,
-  "description": "Wipro x Microsoft FDE Academy — cohort tracking & monitoring app (Next.js + PostgreSQL + Entra ID SSO)",
+  "description": "Wipro x Microsoft AI FDE Program portal (Next.js + PostgreSQL)",
   "engines": {
     "node": ">=20 <21"
   },

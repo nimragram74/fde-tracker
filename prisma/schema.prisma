@@ -1,4 +1,4 @@
-// FDE Tracker — data model
+// Microsoft AI FDE Program Portal — data model
 // Provider is configurable. Default: PostgreSQL (Azure Database for PostgreSQL
 // Flexible Server). To target Azure SQL, change `provider` to "sqlserver" and
 // update DATABASE_URL (see README → "Configurable database").

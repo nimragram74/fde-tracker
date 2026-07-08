@@ -1,4 +1,4 @@
-// The 16-week Microsoft AI FDE Academy curriculum — the single source of truth
+// The 16-week Microsoft AI FDE Program curriculum — the single source of truth
 // used to seed the Week/Day tables and to render the Curriculum page.
 
 export type ProgramDay = { label: string; dow: string; focus: string };
@@ -21,10 +21,10 @@ export const PROGRAM: ProgramWeek[] = [
   {
     number: 1, code: "FND-100 · Foundations",
     title: "The FDE operating model & the Azure AI platform",
-    goal: "Internalise the FDE motion — embedded, outcome-led, hypervelocity — then learn the Azure AI platform and ship a first SDK app.",
+    goal: "Internalise the Microsoft AI FDE motion — embedded, outcome-led, hypervelocity — then learn the Azure AI platform and ship a first SDK app.",
     layer: "Cross-cutting · Models", cert: "AI-901", accent: "#2f6fc0",
     days: d([
-      "The FDE motion + LLMs & tokens",
+      "The Microsoft AI FDE motion + LLMs & tokens",
       "Provision Azure OpenAI + first deployment",
       "The chat completions API with the SDK",
       "Streaming, multimodal & parameters",
@@ -189,15 +189,15 @@ export const PROGRAM: ProgramWeek[] = [
   },
   {
     number: 14, code: "DELIV-1300 · Delivery craft",
-    title: "FDE delivery craft & the 4–90 day embed",
+    title: "Microsoft AI FDE delivery craft & the 4–90 day embed",
     goal: "The consulting half of Code Monday / CXO Friday: discovery, scoping ≤5 agents, defending to CISO/CFO, exec demos, estimation, catalog.",
-    layer: "FDE delivery motion", cert: "AB-100 (prep)", accent: "#2a6f97",
+    layer: "Microsoft AI FDE delivery motion", cert: "AB-100 (prep)", accent: "#2a6f97",
     days: d([
       "The embed: discovery & scoping ≤5 agents",
       "Solution design & defending it",
       "Demoing to executives & stakeholder management",
       "Estimation, SLAs & the agent catalog",
-      "Ship: the FDE embed playbook",
+      "Ship: the Microsoft AI FDE embed playbook",
     ]),
   },
   {

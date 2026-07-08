@@ -161,7 +161,7 @@ export function getDayLearningPlan(week: ProgramWeek, dayIndex: number): DayLear
   ]).slice(0, 7);
 
   return {
-    summary: `${day.label} focuses on ${topic}. Learners should leave with a usable artifact, a short decision record, and evidence that the concept works in an FDE-style customer scenario.`,
+    summary: `${day.label} focuses on ${topic}. Learners should leave with a usable artifact, a short decision record, and evidence that the concept works in a Microsoft AI FDE-style customer scenario.`,
     outcomes: [
       `Explain where ${topic} fits in the ${week.layer} layer.`,
       "Identify the Azure or Microsoft 365 service boundaries, required permissions, and common failure modes.",
@@ -178,7 +178,7 @@ export function getDayLearningPlan(week: ProgramWeek, dayIndex: number): DayLear
     resources,
     lab: {
       title: isShipDay ? `Ship a ${week.code} working artifact` : `Hands-on lab: ${topic}`,
-      scenario: `You are embedded with a customer team that needs ${topic.toLowerCase()} to accelerate an AI delivery outcome. Build the smallest credible proof that a real FDE could demo on Friday.`,
+      scenario: `You are embedded with a customer team that needs ${topic.toLowerCase()} to accelerate an AI delivery outcome. Build the smallest credible proof that a Microsoft AI FDE could demo on Friday.`,
       setup: [
         "Use the academy Azure subscription or a local sandbox approved by the mentor.",
         "Create or reuse a GitHub repo folder for the week and add a README for the day.",
@@ -240,7 +240,7 @@ function buildExercises(weekNumber: number, topic: string, isShipDay: boolean) {
 function buildQuiz(topic: string, layer: string): QuizQuestion[] {
   return [
     {
-      question: `What is the main purpose of ${topic} in an FDE delivery?`,
+      question: `What is the main purpose of ${topic} in a Microsoft AI FDE delivery?`,
       options: ["To produce a reusable customer outcome", "To add unrelated tooling", "To skip validation", "To replace stakeholder review"],
       answer: "To produce a reusable customer outcome",
     },
