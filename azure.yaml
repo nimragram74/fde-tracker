@@ -32,33 +32,10 @@ services:
     project: .
     language: js
     host: appservice
-    # Deploy only the self-contained Next.js "standalone" bundle built by the
-    # prepackage hook below. It contains server.js + a bundled node_modules
-    # (real files, not .bin symlinks), so App Service runs it directly with
-    # `node server.js` — no server-side build, no reliance on a shipped
-    # project node_modules (see main.bicep appCommandLine).
+    # Deploy only the self-contained Next.js "standalone" bundle. It contains
+    # server.js + a bundled node_modules (real files, not .bin symlinks), so
+    # App Service runs it directly with `node server.js` (see main.bicep
+    # appCommandLine) — no server-side build, no reliance on shipped node_modules.
+    # The `build` script (package.json) emits a COMPLETE bundle (next build +
+    # copy-standalone-assets.mjs), so azd's build during packaging fills this in.
     dist: .next/standalone
-    hooks:
-      prepackage:
-        posix:
-          shell: sh
-          run: |
-            set -e
-            BUILD_STANDALONE=1 npm run build
-            # public/ and .next/static are NOT traced into standalone — copy them in.
-            cp -r public .next/standalone/
-            cp -r .next/static .next/standalone/.next/
-            # Prisma query engine + client are often missed by output tracing —
-            # copy them explicitly so runtime DB queries work.
-            mkdir -p .next/standalone/node_modules/@prisma .next/standalone/node_modules/.prisma
-            cp -r node_modules/@prisma/. .next/standalone/node_modules/@prisma/
-            cp -r node_modules/.prisma/. .next/standalone/node_modules/.prisma/
-        windows:
-          shell: pwsh
-          run: |
-            $env:BUILD_STANDALONE = "1"; npm run build
-            Copy-Item -Recurse -Force public .next/standalone/public
-            Copy-Item -Recurse -Force .next/static .next/standalone/.next/static
-            New-Item -ItemType Directory -Force .next/standalone/node_modules/@prisma, .next/standalone/node_modules/.prisma | Out-Null
-            Copy-Item -Recurse -Force node_modules/@prisma/* .next/standalone/node_modules/@prisma/
-            Copy-Item -Recurse -Force node_modules/.prisma/* .next/standalone/node_modules/.prisma/
