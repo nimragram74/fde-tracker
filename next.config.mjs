@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Always emit the self-contained 'standalone' server bundle. Both the
-  // container (Dockerfile) and App Service deploy run `node server.js` from it.
-  // (`next start` still works locally against the same build.)
-  output: "standalone",
+  // Container builds (Dockerfile sets BUILD_STANDALONE=1) use the self-contained
+  // 'standalone' output. App Service builds on the server (Oryx) and runs
+  // `next start` against the normal build.
+  output: process.env.BUILD_STANDALONE ? "standalone" : undefined,
   reactStrictMode: true,
   poweredByHeader: false,
   experimental: {

@@ -105,7 +105,9 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
   name: 'fde-plan-${resourceToken}'
   location: location
   tags: tags
-  sku: { name: 'B1', tier: 'Basic' }
+  // B2 (2 vCPU / 3.5 GB): B1 was too small to run the Next.js build (Oryx)
+  // within the deploy timeout. The app also runs its build on this instance.
+  sku: { name: 'B2', tier: 'Basic' }
   kind: 'linux'
   properties: { reserved: true }
 }
@@ -125,14 +127,12 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       healthCheckPath: '/api/health'
-      // Run the prebuilt Next.js standalone server directly. HOSTNAME=0.0.0.0 is
-      // required so the server binds all interfaces (App Service sets HOSTNAME to
-      // the container name otherwise, and the health check would fail). PORT is
-      // provided by App Service (8080). Schema is applied by the postprovision hook.
-      appCommandLine: 'HOSTNAME=0.0.0.0 node server.js'
+      // Oryx installs deps + builds on the server (SCM build below). On boot,
+      // apply the Prisma schema (idempotent) then start Next. `npx --no-install`
+      // uses the local prisma@5 CLI (a dependency) and never downloads at runtime.
+      appCommandLine: 'npx --no-install prisma db push --skip-generate && npm run start'
       appSettings: [
-        { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'false' }
-        { name: 'ENABLE_ORYX_BUILD', value: 'false' }
+        { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'true' }
         { name: 'WEBSITE_NODE_DEFAULT_VERSION', value: '~20' }
         { name: 'NODE_ENV', value: 'production' }
         { name: 'NEXT_TELEMETRY_DISABLED', value: '1' }

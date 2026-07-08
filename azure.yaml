@@ -1,43 +1,16 @@
 # Azure Developer CLI (azd) configuration.
 # `azd up` provisions the infra in infra/main.bicep and deploys this app.
+#
+# Azure App Service (Oryx) installs dependencies and runs the Next.js build on
+# the server (SCM_DO_BUILD_DURING_DEPLOYMENT=true in main.bicep). The app applies
+# the Prisma schema on boot (see main.bicep appCommandLine) — no build/deploy
+# hooks needed here.
 name: fde-tracker
 metadata:
   template: fde-tracker@1.0.0
-
-# After the app is deployed, apply the Prisma schema and seed demo data against
-# the Azure PostgreSQL (uses the DATABASE_URL output). This runs as *postdeploy*
-# (not postprovision) so it never runs concurrently with packaging's `npm ci` —
-# azd overlaps packaging with provisioning, and two `npm ci` in the same
-# node_modules corrupt each other. node_modules already exists from packaging,
-# so no reinstall is needed here (the pinned prisma@5 CLI + tsx are present).
-hooks:
-  postdeploy:
-    posix:
-      shell: sh
-      continueOnError: false
-      interactive: false
-      run: |
-        echo "→ Applying schema & seeding demo data to Azure PostgreSQL…"
-        npx prisma db push --skip-generate
-        npm run seed
-    windows:
-      shell: pwsh
-      continueOnError: false
-      interactive: false
-      run: |
-        Write-Host "→ Applying schema & seeding demo data to Azure PostgreSQL…"
-        npx prisma db push --skip-generate
-        npm run seed
 
 services:
   web:
     project: .
     language: js
     host: appservice
-    # Deploy only the self-contained Next.js "standalone" bundle. It contains
-    # server.js + a bundled node_modules (real files, not .bin symlinks), so
-    # App Service runs it directly with `node server.js` (see main.bicep
-    # appCommandLine) — no server-side build, no reliance on shipped node_modules.
-    # The `build` script (package.json) emits a COMPLETE bundle (next build +
-    # copy-standalone-assets.mjs), so azd's build during packaging fills this in.
-    dist: .next/standalone
