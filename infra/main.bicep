@@ -125,10 +125,11 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
       ftpsState: 'Disabled'
       minTlsVersion: '1.2'
       healthCheckPath: '/api/health'
-      // Push the Prisma schema on boot (idempotent), then start Next.
-      // The app is built on the deploy machine (see azure.yaml prepackage hook),
-      // so App Service skips the Oryx build and just runs the prebuilt output.
-      appCommandLine: 'npx prisma db push --skip-generate && npm run start'
+      // Just start Next — the app is prebuilt on the deploy machine (azure.yaml
+      // prepackage hook) and the DB schema is applied there too (postprovision
+      // hook). Running `prisma db push` here would make App Service download the
+      // Prisma CLI at boot (devDependency isn't deployed), hanging startup.
+      appCommandLine: 'npm run start'
       appSettings: [
         { name: 'SCM_DO_BUILD_DURING_DEPLOYMENT', value: 'false' }
         { name: 'ENABLE_ORYX_BUILD', value: 'false' }
