@@ -150,6 +150,9 @@ resource web 'Microsoft.Web/sites@2023-12-01' = {
 }
 
 // ── Key Vault (secrets, resolved by the web app's identity) ──────────
+// The vault is declared with NO inline access policy so it does not depend
+// on the web app. The web app depends on the vault's secret URIs, and the
+// access-policy grant below depends on both — a linear chain, not a cycle.
 resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: 'kv${resourceToken}'
   location: location
@@ -159,6 +162,16 @@ resource kv 'Microsoft.KeyVault/vaults@2023-07-01' = {
     tenantId: subscription().tenantId
     enableSoftDelete: true
     enableRbacAuthorization: false
+    accessPolicies: []
+  }
+}
+
+// Grant the web app's system-assigned identity read access to secrets.
+// Declared separately (kv → web → this) to avoid the kv ⇄ web dependency cycle.
+resource kvAccess 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01' = {
+  parent: kv
+  name: 'add'
+  properties: {
     accessPolicies: [
       {
         tenantId: subscription().tenantId
