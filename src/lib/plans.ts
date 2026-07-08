@@ -12,7 +12,7 @@ export type PlanFeatures = {
 
 export const FEATURE_META: { key: keyof PlanFeatures; label: string; description: string }[] = [
   { key: "analytics", label: "Advanced analytics", description: "Charts, trends, at-risk detection & cohort comparisons." },
-  { key: "sso", label: "Entra ID SSO", description: "Single sign-on with Microsoft Entra ID." },
+  { key: "sso", label: "Open access", description: "No SSO required for this deployment." },
   { key: "exports", label: "Data exports", description: "CSV / report exports of progress & certifications." },
   { key: "api", label: "API access", description: "Programmatic read access for downstream tools." },
   { key: "prioritySupport", label: "Priority support", description: "Faster support SLAs for the CoE." },

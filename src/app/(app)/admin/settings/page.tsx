@@ -99,7 +99,7 @@ export default async function SettingsPage() {
           <h2 className="font-semibold">Environment</h2>
         </div>
         <dl className="grid gap-x-8 gap-y-2 text-sm sm:grid-cols-2">
-          <Row k="Auth" v="Microsoft Entra ID SSO" />
+          <Row k="Auth" v="Open access" />
           <Row k="Hosting" v="Azure App Service (Linux · Node 20)" />
           <Row k="Runtime" v={process.env.NODE_ENV ?? "development"} />
           <Row k="App Insights" v={process.env.APPLICATIONINSIGHTS_CONNECTION_STRING ? "connected" : "not configured"} />

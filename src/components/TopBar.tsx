@@ -1,7 +1,6 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { getActivePlan } from "../lib/plans";
 import { PlanBadge } from "./PlanBadge";
-import { LogOut } from "lucide-react";
 
 function initials(name?: string | null) {
   if (!name) return "•";
@@ -34,17 +33,7 @@ export async function TopBar() {
             </div>
           </div>
         </div>
-        <form
-          action={async () => {
-            "use server";
-            await signOut({ redirectTo: "/login" });
-          }}
-        >
-          <button className="btn btn-ghost px-2.5 py-1.5 text-xs" title="Sign out">
-            <LogOut size={14} />
-            <span className="hidden sm:inline">Sign out</span>
-          </button>
-        </form>
+        <span className="chip hidden sm:inline-flex">Open access</span>
       </div>
     </header>
   );
