@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../../lib/db";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Badge, participantTone, labelize } from "@/components/Badge";
-import { TOTAL_DAYS } from "@/lib/program";
+import { TOTAL_DAYS } from "../../../../lib/program";
 import { ArrowLeft, CalendarDays, UserCog } from "lucide-react";
 
 export const dynamic = "force-dynamic";

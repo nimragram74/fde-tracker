@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
-import { currentUser } from "@/lib/rbac";
+import { prisma } from "../../lib/db";
+import { currentUser } from "../../lib/rbac";
 import { revalidatePath } from "next/cache";
 import type { ProgressStatus } from "@prisma/client";
 

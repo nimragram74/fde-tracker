@@ -1,5 +1,5 @@
 import { auth, signOut } from "@/auth";
-import { getActivePlan } from "@/lib/plans";
+import { getActivePlan } from "../lib/plans";
 import { PlanBadge } from "./PlanBadge";
 import { LogOut } from "lucide-react";
 

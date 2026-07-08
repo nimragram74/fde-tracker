@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "./db";
 
 export async function getSetting(key: string, fallback = ""): Promise<string> {
   const s = await prisma.appSetting.findUnique({ where: { key } });

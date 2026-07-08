@@ -1,7 +1,7 @@
 "use server";
 
-import { prisma } from "@/lib/db";
-import { requireAdmin } from "@/lib/rbac";
+import { prisma } from "../../../lib/db";
+import { requireAdmin } from "../../../lib/rbac";
 import { revalidatePath } from "next/cache";
 
 const FEATURE_KEYS = ["analytics", "sso", "exports", "api", "prioritySupport", "customBranding"] as const;

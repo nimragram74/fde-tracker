@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/db";
-import { currentUser } from "@/lib/rbac";
+import { prisma } from "../../../../lib/db";
+import { currentUser } from "../../../../lib/rbac";
 import { Heatmap, type HeatWeek } from "@/components/Heatmap";
 import { StatCard } from "@/components/StatCard";
 import { Badge, participantTone, certTone, capstoneTone, labelize } from "@/components/Badge";
-import { TOTAL_DAYS } from "@/lib/program";
+import { TOTAL_DAYS } from "../../../../lib/program";
 import { setDayStatus } from "../../actions";
 import { ArrowLeft, GraduationCap, CheckCircle2, Star, Award, Rocket } from "lucide-react";
 

@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../lib/db";
 import { StatCard } from "@/components/StatCard";
 import { ProgressBar } from "@/components/ProgressBar";
 import { StatusDonut, WeeklyBars } from "@/components/charts";
 import { Badge, participantTone, labelize } from "@/components/Badge";
-import { planUsage, hasFeature } from "@/lib/plans";
-import { TOTAL_DAYS } from "@/lib/program";
+import { planUsage, hasFeature } from "../../lib/plans";
+import { TOTAL_DAYS } from "../../lib/program";
 import { Users, GraduationCap, Award, Rocket, AlertTriangle, Lock } from "lucide-react";
 
 export const dynamic = "force-dynamic";

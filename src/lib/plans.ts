@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma } from "./db";
 import type { Plan } from "@prisma/client";
 
 export type PlanFeatures = {

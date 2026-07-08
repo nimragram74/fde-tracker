@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { StatCard } from "@/components/StatCard";
 import { Badge, certTone, labelize } from "@/components/Badge";
-import { CERT_LADDER } from "@/lib/program";
+import { CERT_LADDER } from "../../../lib/program";
 import { Award, CheckCircle2, Clock, ListChecks } from "lucide-react";
 
 export const dynamic = "force-dynamic";

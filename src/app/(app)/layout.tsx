@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/Sidebar";
 import { TopBar } from "@/components/TopBar";
-import { isAdmin } from "@/lib/rbac";
-import { getOrgName } from "@/lib/settings";
+import { isAdmin } from "../../lib/rbac";
+import { getOrgName } from "../../lib/settings";
 
 export const dynamic = "force-dynamic";
 

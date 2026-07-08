@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { prisma } from "@/lib/db";
+import { prisma } from "../../../lib/db";
 import { ProgressBar } from "@/components/ProgressBar";
 import { Badge, participantTone, labelize } from "@/components/Badge";
-import { TOTAL_DAYS } from "@/lib/program";
+import { TOTAL_DAYS } from "../../../lib/program";
 
 export const dynamic = "force-dynamic";
 

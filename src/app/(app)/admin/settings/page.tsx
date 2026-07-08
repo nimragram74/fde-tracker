@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/db";
-import { isAdmin } from "@/lib/rbac";
-import { getDbInfo, getOrgName } from "@/lib/settings";
+import { prisma } from "../../../../lib/db";
+import { isAdmin } from "../../../../lib/rbac";
+import { getDbInfo, getOrgName } from "../../../../lib/settings";
 import { updateOrgName, updateDbProviderLabel } from "../actions";
 import { Database, Building2, ShieldAlert, Server } from "lucide-react";
 

@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/db";
-import { isAdmin } from "@/lib/rbac";
-import { getOrg, FEATURE_META, planFeatures, type PlanFeatures } from "@/lib/plans";
+import { prisma } from "../../../../lib/db";
+import { isAdmin } from "../../../../lib/rbac";
+import { getOrg, FEATURE_META, planFeatures, type PlanFeatures } from "../../../../lib/plans";
 import { setActivePlan, updatePlan } from "../actions";
 import { Check, ShieldAlert } from "lucide-react";
 

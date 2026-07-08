@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import { authConfig } from "@/auth.config";
-import { prisma } from "@/lib/db";
+import { prisma } from "./lib/db";
 
 const adminEmails = (process.env.ADMIN_EMAILS || "")
   .toLowerCase()
