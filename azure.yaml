@@ -4,17 +4,20 @@ name: fde-tracker
 metadata:
   template: fde-tracker@1.0.0
 
-# After infra is provisioned, apply the Prisma schema and seed demo data
-# against the freshly-created Azure PostgreSQL (uses the DATABASE_URL output).
+# After the app is deployed, apply the Prisma schema and seed demo data against
+# the Azure PostgreSQL (uses the DATABASE_URL output). This runs as *postdeploy*
+# (not postprovision) so it never runs concurrently with packaging's `npm ci` —
+# azd overlaps packaging with provisioning, and two `npm ci` in the same
+# node_modules corrupt each other. node_modules already exists from packaging,
+# so no reinstall is needed here (the pinned prisma@5 CLI + tsx are present).
 hooks:
-  postprovision:
+  postdeploy:
     posix:
       shell: sh
       continueOnError: false
       interactive: false
       run: |
         echo "→ Applying schema & seeding demo data to Azure PostgreSQL…"
-        npm ci
         npx prisma db push --skip-generate
         npm run seed
     windows:
@@ -23,7 +26,6 @@ hooks:
       interactive: false
       run: |
         Write-Host "→ Applying schema & seeding demo data to Azure PostgreSQL…"
-        npm ci
         npx prisma db push --skip-generate
         npm run seed
 
